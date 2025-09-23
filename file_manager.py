@@ -2,8 +2,8 @@ import csv
 from tkinter import filedialog
 
 
-def select_file():
-    global file_path
+def select_file(refresh_callback):
+    
     new_file_path = filedialog.askopenfilename(
         title="Select a file",
         filetypes=(("Audio files", "*.mp3 *.ogg *.m4a"), ("All files", "*.*"))
@@ -11,6 +11,9 @@ def select_file():
     if new_file_path:
         print("Selected file:", new_file_path)
         file_path = new_file_path
+        add_recent_file(file_path)
+        refresh_callback()
+        return file_path
 
 def add_recent_file(file_path):
     recent_files = []
@@ -27,3 +30,10 @@ def add_recent_file(file_path):
         with open("recent_files.txt", "w") as f:
             for path in recent_files:
                 f.write(path + "\n")
+
+def get_recent_files():
+    try:
+        with open("recent_files.txt", "r") as f:
+            return [line.strip() for line in f.readlines()]
+    except FileNotFoundError:
+        return []  # No recent files yet
