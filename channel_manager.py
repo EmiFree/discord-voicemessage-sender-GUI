@@ -43,3 +43,11 @@ def new_channel(master, refresh_callback):
             messagebox.showwarning("Missing", "Both fields required.")
     
     tb.Button(popup, text="Submit", command=get_entry).grid(row=2, columnspan=2, pady=5)
+
+def get_channel_id_by_name(channel_name):
+    with open("channel_id.csv", newline="") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            if row["Channel Name"] == channel_name:
+                return row["Channel ID"]
+    return None
