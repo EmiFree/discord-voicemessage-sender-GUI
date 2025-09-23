@@ -3,21 +3,12 @@ import ttkbootstrap as tb
 from channel_manager import get_channel_id_by_name, new_channel, get_channel_names
 from ttkbootstrap.constants import *
 from tkinter import messagebox
-from token_manager import get_token, save_token
+from token_manager import get_token, login
 from tkinter import filedialog
-
+from file_manager import select_file
 channel_names = get_channel_names()
 TOKEN = get_token()
 file_path = None  # Placeholder for selected file path
-def select_file():
-    global file_path
-    new_file_path = filedialog.askopenfilename(
-        title="Select a file",
-        filetypes=(("Audio files", "*.mp3 *.ogg"), ("All files", "*.*"))
-    )
-    if new_file_path:
-        print("Selected file:", new_file_path)
-        file_path = new_file_path
 
 def refresh_combo():
     combo['values'] = get_channel_names()
@@ -52,7 +43,9 @@ toolbar.pack(side="top", fill="x", pady=5)
 tb.Button(toolbar, text="Add Channel",
             command=lambda: new_channel(master, refresh_combo),
             bootstyle="success").pack(side="left", padx=5)
-tb.Button(toolbar, text="Login", bootstyle="primary").pack(side="right", padx=5)
+tb.Button(toolbar, text="Login",
+            command=lambda: login(master), 
+            bootstyle="primary").pack(side="left", padx=5)
 
 #> Left Frame (Channel Selection)
 left_frame = tb.Frame(master)
