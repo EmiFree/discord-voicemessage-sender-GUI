@@ -12,6 +12,7 @@ file_path = None  # Placeholder for selected file path
 
 def refresh_combo():
     combo['values'] = get_channel_names()
+    
 def refresh_file_list():
     recent_files = get_recent_files()
     file_box['values'] = recent_files
@@ -40,6 +41,15 @@ def set_file_path(event):
     global file_path
     file_path = file_box.get()
 
+def help_popup(master):
+    help_text = (
+        "1. Login with your Discord user token https://www.youtube.com/watch?v=LnBnm_tZlyU\n\n"
+        "2. Add channels using the 'Add Channel' button, providing both a name and numeric ID.\n\n"
+        "3. Select a channel from the dropdown on the left.\n\n"
+        "4. Select an audio file using the 'Browse' button or choose from recent files.\n\n"
+        "5. Click 'Send Voice Message' to send the selected audio as a voice message to the chosen channel."
+    )
+    messagebox.showinfo("Help", help_text)
 master = tb.Window(themename="superhero")
 master.title("Discord Voice Message Sender")
 master.geometry("800x600")
@@ -49,38 +59,40 @@ toolbar = tb.Frame(master)
 toolbar.pack(side="top", fill="x", pady=5)
 tb.Button(toolbar, text="Add Channel",
             command=lambda: new_channel(master, refresh_combo),
-            bootstyle="success").pack(side="left", padx=5)
+            bootstyle="primary").pack(side="left", padx=5)
 tb.Button(toolbar, text="Login",
             command=lambda: login(master), 
             bootstyle="primary").pack(side="left", padx=5)
-
+tb.Button(toolbar, text="Help",
+            command=lambda: help_popup(master), 
+            bootstyle="primary").pack(side="left", padx=5)
+tb.Button(toolbar, text="Send Voice Message", 
+            command=send_message, 
+            bootstyle="success").pack(side="left", padx=5)
+app_frame = tb.Frame(master)
+app_frame.pack(side="bottom", fill="both", expand=True)
 #> Left Frame (Channel Selection)
-left_frame = tb.Frame(master)
-left_frame.pack(side="left", padx=10, pady=10, fill="y")
+left_frame = tb.Frame(app_frame)
+left_frame.grid(row=0, column=0, padx=10, pady=10, sticky="n")
 tb.Label(left_frame, text="Select a Channel", anchor="n").pack(fill="x", padx=5, pady=5)
 # Combobox (dropdown list)
-combo = tb.Combobox(left_frame, values=channel_names, bootstyle="info", width=15)
+combo = tb.Combobox(left_frame, values=channel_names, bootstyle="info", width=15, height=15)
 combo.pack(padx=5, pady=5, anchor="n")
 
 #> Right Frame (File Selection)
-right_frame = tb.Frame(master)
-right_frame.pack(side="right", padx=10, pady=10, fill="y")
-tb.Label(right_frame, text="Select a File", anchor="n").pack(fill="x", padx=5, pady=5)
+right_frame = tb.Frame(app_frame)
+right_frame.grid(row=0, column=1, padx=10, pady=10, sticky="n")
+tb.Label(right_frame, text="Select a New File", anchor="n").grid(row=0, column=0, padx=5, pady=5)
+tb.Label(right_frame, text="Select a Recent File", anchor="n").grid(row=0, column=1, padx=5, pady=5)
 tb.Button(right_frame, text="Browse", 
             command=lambda: select_file(refresh_file_list), 
-            bootstyle="info").pack(padx=5, pady=5, anchor="n")
+            bootstyle="info").grid(row=1, column=0, padx=5)
 file_box = tb.Combobox(right_frame, height=15, width=20, bootstyle="info")
-file_box.pack(padx=5, pady=5)
+file_box.grid(row=1, column=1, padx=5)
 refresh_file_list()
 file_box.bind("<<ComboboxSelected>>", set_file_path)
 
-#> Send Button
-tb.Button(master, text="Send Voice Message", 
-            command=send_message, 
-            bootstyle="success").pack(pady=20)
 
 
 master.mainloop()
-# voicemessage = VoiceMessageSender(TOKEN, CHANNEL_ID)
-# voicemessage.SendVoiceMessage("D:\path\to\your\audio\file.mp3")
 
