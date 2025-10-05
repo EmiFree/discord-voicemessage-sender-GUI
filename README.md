@@ -5,6 +5,7 @@ This is a GUI wrapper for the Discord Voice Message Sender library. This allows 
 ## Installation
 
 To run with python: 
+(May have to activate the python venv included in env/ depending on your installation/platform
 ```bash
 git clone https://github.com/EmiFree/discord-voicemessage-sender-GUI.git # or download the zip with the "Code" button above
 cd discord-voicemessage-sender-GUI
