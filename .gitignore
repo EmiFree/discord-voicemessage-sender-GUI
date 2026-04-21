@@ -2,3 +2,7 @@ user_token.txt
 channel_id.csv
 __pycache__
 recent_files.txt
+env/bin/
+env/include/
+env/lib/
+env/lib64/
